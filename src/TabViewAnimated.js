@@ -11,7 +11,7 @@ import type {
   Layout,
   PagerCommonProps,
   PagerExtraProps,
-  Style,
+  Style
 } from './TabViewTypeDefinitions';
 
 type Props<T> = PagerCommonProps<T> &
@@ -26,7 +26,7 @@ type Props<T> = PagerCommonProps<T> &
     renderHeader?: (props: SceneRendererProps<T>) => ?React.Element<any>,
     renderFooter?: (props: SceneRendererProps<T>) => ?React.Element<any>,
     useNativeDriver?: boolean,
-    style?: Style,
+    style?: Style
   };
 
 type State = {|
@@ -34,7 +34,7 @@ type State = {|
   layoutXY: Animated.ValueXY,
   panX: Animated.Value,
   offsetX: Animated.Value,
-  position: any,
+  position: any
 |};
 
 let TabViewPager;
@@ -60,13 +60,13 @@ export default class TabViewAnimated<T: *> extends React.Component<
     onIndexChange: PropTypes.func.isRequired,
     initialLayout: PropTypes.shape({
       height: PropTypes.number.isRequired,
-      width: PropTypes.number.isRequired,
+      width: PropTypes.number.isRequired
     }),
     canJumpToTab: PropTypes.func.isRequired,
     renderPager: PropTypes.func.isRequired,
     renderScene: PropTypes.func.isRequired,
     renderHeader: PropTypes.func,
-    renderFooter: PropTypes.func,
+    renderFooter: PropTypes.func
   };
 
   static defaultProps = {
@@ -74,9 +74,9 @@ export default class TabViewAnimated<T: *> extends React.Component<
     renderPager: props => <TabViewPager {...props} />,
     initialLayout: {
       height: 0,
-      width: 0,
+      width: 0
     },
-    useNativeDriver: false,
+    useNativeDriver: false
   };
 
   constructor(props: Props<T>) {
@@ -85,7 +85,7 @@ export default class TabViewAnimated<T: *> extends React.Component<
     const { navigationState } = this.props;
     const layout = {
       ...this.props.initialLayout,
-      measured: false,
+      measured: false
     };
 
     const panX = new Animated.Value(0);
@@ -93,7 +93,7 @@ export default class TabViewAnimated<T: *> extends React.Component<
     const layoutXY = new Animated.ValueXY({
       // This is hacky, but we need to make sure that the value is never 0
       x: layout.width || 0.001,
-      y: layout.height || 0.001,
+      y: layout.height || 0.001
     });
     const position = Animated.multiply(
       Animated.divide(Animated.add(panX, offsetX), layoutXY.x),
@@ -105,7 +105,7 @@ export default class TabViewAnimated<T: *> extends React.Component<
       layoutXY,
       panX,
       offsetX,
-      position,
+      position
     };
   }
 
@@ -127,10 +127,7 @@ export default class TabViewAnimated<T: *> extends React.Component<
   _handleLayout = (e: any) => {
     const { height, width } = e.nativeEvent.layout;
 
-    if (
-      this.state.layout.width === width &&
-      this.state.layout.height === height
-    ) {
+    if (this.state.layout.width === width) {
       return;
     }
 
@@ -138,14 +135,14 @@ export default class TabViewAnimated<T: *> extends React.Component<
     this.state.layoutXY.setValue({
       // This is hacky, but we need to make sure that the value is never 0
       x: width || 0.001,
-      y: height || 0.001,
+      y: height || 0.001
     });
     this.setState({
       layout: {
         measured: true,
         height,
-        width,
-      },
+        width
+      }
     });
   };
 
@@ -157,7 +154,7 @@ export default class TabViewAnimated<T: *> extends React.Component<
     navigationState: this.props.navigationState,
     jumpTo: this._jumpTo,
     jumpToIndex: this._jumpToIndex,
-    useNativeDriver: this.props.useNativeDriver === true,
+    useNativeDriver: this.props.useNativeDriver === true
   });
 
   _jumpToIndex = (index: number) => {
@@ -219,7 +216,7 @@ export default class TabViewAnimated<T: *> extends React.Component<
                 ...props,
                 route,
                 index,
-                focused: index === navigationState.index,
+                focused: index === navigationState.index
               });
 
               if (scene) {
@@ -227,7 +224,7 @@ export default class TabViewAnimated<T: *> extends React.Component<
               }
 
               return scene;
-            }),
+            })
           })}
         </View>
         {renderFooter && renderFooter(props)}
@@ -239,9 +236,9 @@ export default class TabViewAnimated<T: *> extends React.Component<
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    overflow: 'hidden',
+    overflow: 'hidden'
   },
   pager: {
-    flex: 1,
-  },
+    flex: 1
+  }
 });
